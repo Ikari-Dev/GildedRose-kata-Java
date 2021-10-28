@@ -9,29 +9,9 @@ class GildedRose {
 
     public void updateQuality() {
         for (Item item : items) {
-            if (!item.name.equals("Aged Brie") && !item.name.equals("Backstage passes to a TAFKAL80ETC concert")) {
-                decreaseQuality(item);
-            } else {
-                if (item.quality < 50) {
-                    item.quality = item.quality + 1;
-                    updateBackstageQuality(item);
-                    
-                }
-            }
+            
+            updateItem(item);
 
-            decreaseSellIn(item);
-
-            if (item.sellIn < 0) {
-                if (!item.name.equals("Aged Brie")) {
-                    if (!item.name.equals("Backstage passes to a TAFKAL80ETC concert")) {
-                        decreaseQuality(item);
-                    } else {
-                        item.quality = 0;
-                    }
-                } else {
-                    increaseQuality(item);
-                }
-            }
         }
     }
 
@@ -56,15 +36,45 @@ class GildedRose {
     private void decreaseQuality(Item item){
         if (item.quality > 0) {
             if (!item.name.equals("Sulfuras, Hand of Ragnaros")) {
-                item.quality = item.quality - 1;
+                item.quality--;
             }
         }
     }  
 
     private void decreaseSellIn(Item item){
         if (!item.name.equals("Sulfuras, Hand of Ragnaros")) {
-            item.sellIn = item.sellIn - 1;
+            item.sellIn--;
         }
+    } 
+
+    private void manageSellInAboveZero(Item item){
+        if (item.sellIn < 0) {
+            if (!item.name.equals("Aged Brie")) {
+                if (!item.name.equals("Backstage passes to a TAFKAL80ETC concert")) {
+                    decreaseQuality(item);
+                } else {
+                    item.quality = 0;
+                }
+            } else {
+                increaseQuality(item);
+            }
+        }
+    } 
+
+    private void updateItem(Item item){
+        if (!item.name.equals("Aged Brie") && !item.name.equals("Backstage passes to a TAFKAL80ETC concert")) {
+            decreaseQuality(item);
+        } else {
+            if (item.quality < 50) {
+                item.quality++;
+                updateBackstageQuality(item);
+                    
+            }
+        }
+
+        decreaseSellIn(item);
+
+        manageSellInAboveZero(item);
     } 
 
 }
