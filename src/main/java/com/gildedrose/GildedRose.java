@@ -52,6 +52,8 @@ class GildedRose {
             if (!item.name.equals("Aged Brie")) {
                 if (!item.name.equals("Backstage passes to a TAFKAL80ETC concert")) {
                     decreaseQuality(item);
+                    conjuredQuality(item);
+                    
                 } else {
                     item.quality = 0;
                 }
@@ -75,6 +77,13 @@ class GildedRose {
         decreaseSellIn(item);
 
         manageSellInAboveZero(item);
+    } 
+
+    private void conjuredQuality(Item item){
+        if(item.name.equals("Conjured")){
+            decreaseQuality(item);
+            decreaseQuality(item);
+        } 
     } 
 
 }
