@@ -1,7 +1,12 @@
 package com.gildedrose;
 
 class GildedRose {
-    Item[] items;
+    private transient Item[] items;
+    private static final int LIMIT_FOR_TWO_ON_QUALITY = 11;
+    private static final int LIMIT_FOR_THREE_ON_QUALITY = 6;
+    private static final int MIN_QUALITY = 0;
+    private static final int MAX_QUALITY = 50;
+    private static final int MIN_SELLIN = 0;
 
     public GildedRose(Item[] items) {
         this.items = items;
@@ -15,26 +20,26 @@ class GildedRose {
         }
     }
 
-    private void updateBackstageQuality(Item item){
+    private void increaseBackstageQuality(Item item){
         if (item.name.equals("Backstage passes to a TAFKAL80ETC concert")) {
-            if (item.sellIn < 11) {
+            if (item.sellIn < LIMIT_FOR_TWO_ON_QUALITY) {
                 increaseQuality(item);
             }
 
-            if (item.sellIn < 6) {
+            if (item.sellIn < LIMIT_FOR_THREE_ON_QUALITY) {
                 increaseQuality(item);
             }
         }
     } 
 
     private void increaseQuality(Item item){
-        if (item.quality < 50) {
+        if (item.quality < MAX_QUALITY) {
             item.quality++;
         }
     }  
 
     private void decreaseQuality(Item item){
-        if (item.quality > 0 && !item.name.equals("Sulfuras, Hand of Ragnaros")) { 
+        if (item.quality > MIN_QUALITY && !item.name.equals("Sulfuras, Hand of Ragnaros")) { 
             item.quality--;
         }
     }  
@@ -46,9 +51,9 @@ class GildedRose {
     } 
 
     private void manageSellInAboveZero(Item item){
-        if (item.sellIn < 0) {
+        if (item.sellIn < MIN_SELLIN) {
             if (!item.name.equals("Aged Brie")) {
-                decreaseQualityAndManageConcert(item);
+                decreaseQualityOrManageConcert(item);
             } else {
                 increaseQuality(item);
             }
@@ -59,9 +64,9 @@ class GildedRose {
         if (!item.name.equals("Aged Brie") && !item.name.equals("Backstage passes to a TAFKAL80ETC concert")) {
             decreaseQuality(item);
         } else {
-            if (item.quality < 50) {
+            if (item.quality < MAX_QUALITY) {
                 item.quality++;
-                updateBackstageQuality(item);
+                increaseBackstageQuality(item);
                     
             }
         }
@@ -78,7 +83,7 @@ class GildedRose {
         } 
     } 
 
-    private void decreaseQualityAndManageConcert(Item item){
+    private void decreaseQualityOrManageConcert(Item item){
         if (!item.name.equals("Backstage passes to a TAFKAL80ETC concert")) {
             decreaseQuality(item);
             decreaseConjuredQuality(item);
